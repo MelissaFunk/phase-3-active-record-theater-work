@@ -2,19 +2,21 @@ class Role < ActiveRecord::Base
   has_many :auditions
 
   def actors
-    self.auditions.select(:actor)
+    self.auditions.map(&:actor)
   end
 
   def locations
-    self.auditions.select(:location)
+    self.auditions.map(&:location)
   end
 
   def lead
-    self.auditions.find_by(hired: true) ? self.auditions.find_by(hired: true) : 'no actor has been hired for this role'
+    hired_true = self.auditions.find_by(hired: true)
+    hired_true ? hired_true : 'no actor has been hired for this role'
   end
 
   def understudy
-    self.auditions.where(hired: true)[1] ? self.auditions.where(hired: true)[1] : 'no actor has been hired for understudy for this role'
+    understudy_true = self.auditions.where(hired: true)[1]
+    understudy_true ? understudy_true : 'no actor has been hired for understudy for this role'
   end
 
 end
